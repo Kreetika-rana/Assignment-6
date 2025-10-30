@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assignment 6 - Travel App</title>
+  <style>
+    :root { --accent: #1565c0; --muted: #666; --card: #f8f9fb; }
+    body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; line-height: 1.5;}
+    header { background: var(--accent); color: white; padding: 12px 20px; position: sticky; top: 0; z-index: 100;}
+    nav a { color: rgba(255,255,255,0.85); margin-right: 12px; text-decoration: none; padding: 6px; border-radius: 4px;}
+    nav a.active { background: rgba(255,255,255,0.15); }
+    main { padding: 20px; max-width: 1100px; margin: 0 auto; }
+    section { margin-bottom: 36px; }
+    h2 { margin-top: 0; color: var(--accent); }
+
+    /* Packages table */
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { padding: 8px 10px; border: 1px solid #ddd; text-align: left; }
+    .muted { color: var(--muted); font-size: 0.95em; }
+
+    /* Booking form */
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card { background: var(--card); padding: 12px; border-radius: 8px; }
+
+    /* Gallery */
+    .gallery-controls { margin-bottom: 8px; }
+    .gallery.grid { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); }
+    .gallery.list { display: block; }
+    .thumb { display: block; cursor: pointer; border-radius: 6px; overflow: hidden; border: 1px solid #ccc; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display: none; align-items:center; justify-content:center; background: rgba(0,0,0,0.6); z-index: 200; }
+    .modal.open { display:flex; }
+    .modal .box { background: white; padding: 10px; border-radius: 6px; max-width: 90%; max-height: 90%; }
+    .modal img { max-width: 100%; max-height: 80vh; display: block; }
+
+    /* Small responsive */
+    @media (max-width: 700px) {
+      .gallery.grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Disabled submit style */
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav id="mainNav">
+      <a href="#packages" class="nav-link">Packages</a>
+      <a href="#booking" class="nav-link">Booking</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Packages -->
+    <section id="packages">
+      <h2>Packages</h2>
+      <p class="muted">Packages are defined in JS and rendered below. Final Price is computed client-side using seasonal multipliers.</p>
+      <div class="card">
+        <table id="packagesTable" aria-describedby="packagesDesc">
+          <thead>
+            <tr>
+              <th>ID</th><th>Destination</th><th>Duration (days)</th><th>Base Price (per night)</th><th>Season</th><th>Final Price</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Booking -->
+    <section id="booking">
+      <h2>Booking Price Estimator</h2>
+      <div class="card">
+        <form id="bookingForm">
+          <div class="grid">
+            <div>
+              <label for="pkgSelect">Select Package</label><br>
+              <select id="pkgSelect"></select>
+            </div>
+            <div>
+              <label for="checkIn">Check-in</label><br>
+              <input type="date" id="checkIn" />
+            </div>
+            <div>
+              <label for="checkOut">Check-out</label><br>
+              <input type="date" id="checkOut" />
+            </div>
+            <div>
+              <label for="guests">Guests</label><br>
+              <input type="number" id="guests" min="1" value="1" />
+            </div>
+            <div>
+              <label for="promo">Promo Code</label><br>
+              <input type="text" id="promo" placeholder="e.g., EARLYBIRD" />
+            </div>
+            <div>
+              <label>&nbsp;</label><br>
+              <button id="bookSubmit" type="submit" disabled>Book Now</button>
+            </div>
+          </div>
+        </form>
+
+        <div style="margin-top:12px">
+          <strong>Estimate:</strong>
+          <div id="estimateBox" class="muted">Select package and dates to see estimate.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery">
+      <h2>Gallery</h2>
+      <div class="card">
+        <div class="gallery-controls">
+          <button id="toggleLayout">Toggle Layout</button>
+        </div>
+        <div id="galleryGrid" class="gallery grid">
+          <!-- Thumbnails (data-large attributes) inserted by JS -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for gallery -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="box">
+      <button id="modalClose">Close</button>
+      <div>
+        <img id="modalImage" src="" alt="">
+      </div>
+      <div id="modalCaption" class="muted" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
